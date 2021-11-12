@@ -20,12 +20,15 @@ def ip():
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (XHTML, like Gecko) '
                       'Chrome/84.0.4147.135 Safari/537.36 '
     }
-
-    requ = requests.get(url='http://www.cip.cc/' + sys.argv[1], headers=ua)
-    xpath = etree.HTML(requ.text)
-    text = xpath.xpath('/html/body/div/div/div[3]/pre/text()')
-    for i in text:
-        print(i)
+    try:
+        requ = requests.get(url='https://m.ip138.com/iplookup.asp?ip=' + sys.argv[1], headers=ua)
+        requ = requ.text.encode('ISO-8859-1').decode(requests.utils.get_encodings_from_content(requ.text)[0])
+        content1 = re.findall(r'<caption><h1>(.*?)</h1></caption>',requ)
+        content2 = re.findall(r'</td><td>(.*?)</td></tr></tbody>',requ)
+        print(content1[0])
+        print("ASN归属地 :",content2[0])
+    except:
+        print('特殊IP!')
 
 
 def domain():
