@@ -13,10 +13,13 @@ def main(website):
 	url = f"https://ip.bmcx.com/{website}__ip/"
 	try:
 		requ = requests.get(url=url,headers=ua)
-		ip = re.findall(r'<td height="25" bgcolor="#FFFFFF" style="text-align: center">(.*?)</td>',requ.text)
-		address = re.findall(r'<td bgcolor="#FFFFFF" style="text-align: center">(.*?)</td>',requ.text)
-		print("\n    "+'IP: ' , Fore.GREEN + ip[0])
-		print("    "+'物理地址: ' , Fore.RED + address[0])
+		if requ.status_code == 503:
+			print('服务器503')
+		else:
+			ip = re.findall(r'<td height="25" bgcolor="#FFFFFF" style="text-align: center">(.*?)</td>',requ.text)
+			address = re.findall(r'<td bgcolor="#FFFFFF" style="text-align: center">(.*?)</td>',requ.text)
+			print("\n    "+'IP: ' , Fore.GREEN + ip[0])
+			print("    "+'物理地址: ' , Fore.RED + address[0])
 	except:
 		print(Fore.LIGHTMAGENTA_EX + "\n\t请检查是否开了代理，或IP/域名有问题")
 
